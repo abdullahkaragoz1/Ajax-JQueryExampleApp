@@ -1,0 +1,90 @@
+﻿<hr />
+
+<button id="btnSend">
+    İçeriği değiştir.
+</button>
+
+<button id="btnAjaxValue">
+    xHttp (Ajax) ile Content Bilgi Getir
+</button>
+
+<button id="btnAjaxView">
+    xHttp (Ajax) ile View Bilgi Getir
+</button>
+
+<button id="btnAjaxValueBadRequest">
+    jQuery Ajax ile Bilgi Getir
+</button>
+<hr />
+<div id="demo">
+
+</div>
+<script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
+        crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        $("#btnSend").on("click",
+            function () {
+                $("#demo").html("Bu içerik elle değiştirilmiştir.");
+            });
+
+        $("#btnAjaxValue").on("click",
+            function () {
+                var xHttp = new XMLHttpRequest();
+
+                xHttp.onreadystatechange = function () {
+                    //console.log("istek hareket etti");
+                    if (this.readyState === 4) {
+                        //console.log("sunucu cevap verdi ve ben cevaba eriştim");
+                        if (this.status === 200) {
+                            //console.log("Sunucu başarılı bir cevap verdi");
+                            $("#demo").html(this.response);
+                        } else {
+                            console.log("Sunucu olumsuz cevap verdi");
+                        }
+                    }
+                }
+
+                xHttp.open("POST", "/AjaxUsage/GetValueContent");
+                xHttp.send();
+            });
+
+        $("#btnAjaxView").on("click",
+            function () {
+                var xHttp = new XMLHttpRequest();
+
+                xHttp.onreadystatechange = function () {
+                    //console.log("istek hareket etti");
+                    if (this.readyState === 4) {
+                        //console.log("sunucu cevap verdi ve ben cevaba eriştim");
+                        if (this.status === 200) {
+                            //console.log("Sunucu başarılı bir cevap verdi");
+                            $("#demo").html(this.response);
+                        } else {
+                            console.log("Sunucu olumsuz cevap verdi");
+                        }
+                    }
+                }
+
+                xHttp.open("POST", "/AjaxUsage/GetValueView");
+                xHttp.send();
+            });
+
+        $("#btnAjaxValueBadRequest").on("click",
+            function () {
+                $.ajax({
+                    url: "/AjaxUsage/GetBadRequest",
+                    type: "POST",
+                    success: function (response) {
+                        console.log(response);
+                    },
+                    error: function (response, requestType, requestStatus) {
+                        console.log(response);
+                        console.log(requestType);
+                        console.log(requestStatus);
+                    }
+                });
+            });
+    });
+</script>
